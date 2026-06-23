@@ -115,15 +115,35 @@ Focus:
 
 ## Install Dependencies
 
+Use a virtual environment and the pinned `requirements.txt` at the repo root:
+
 ```bash
-pip install flask pymongo dnspython
+python -m venv .venv
+source .venv/bin/activate
+pip install -r requirements.txt
 ```
+
+## Configure Secrets
+
+Never hardcode credentials in source. Copy the template and fill it in:
+
+```bash
+cp .env.example .env
+```
+
+Load these values via `python-dotenv` at startup. `.env` is already
+git-ignored so it will not be committed.
 
 ## Download SSL Certificate
 
+Download the Amazon CA bundle:
+
 ```bash
-wget https://truststore.pki.rds.amazonaws.com/global/global-bundle.pem
+curl -O https://truststore.pki.rds.amazonaws.com/global/global-bundle.pem
 ```
+
+The bundle is git-ignored. Reference it via the `DOCDB_TLS_CA_FILE`
+environment variable rather than committing it to the repo.
 
 ## Open SSH Tunnel
 
@@ -402,9 +422,14 @@ name: Download SSL Certificate
 
 trigger:
   type: file_edit
+  patterns:
+    - "**/*.py"
 
 action:
   type: shell
+  command: |
+    test -f global-bundle.pem || \
+    curl -O https://truststore.pki.rds.amazonaws.com/global/global-bundle.pem
 ```
 
 Benefits:
