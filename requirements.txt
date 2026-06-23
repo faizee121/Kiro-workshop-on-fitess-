@@ -1,0 +1,17 @@
+# Core web framework
+Flask==3.0.3
+
+# MongoDB / Amazon DocumentDB driver
+pymongo==4.8.0
+
+# Required for mongodb+srv:// connection strings
+dnspython==2.6.1
+
+# Environment variable loading
+python-dotenv==1.0.1
+
+# Password hashing for authentication
+Werkzeug==3.0.3
+
+# Testing
+pytest==8.3.2
